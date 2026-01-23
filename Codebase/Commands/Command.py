@@ -41,7 +41,8 @@ class Commands:
                 if len(cmd) < 2:
                     print("Drop what?")
                 else:
-                    self.game.drop(" ").join(cmd[1:])
+                    itemName = (" ").join(cmd[1:])
+                    self.game.drop(itemName)
             case "equip":
                 if len(cmd) < 2:
                     print("Equip what?")

@@ -294,7 +294,7 @@ Command list:
     # Drop item from inventory
     def drop(self, itemName):
         room = self.dungeon[self.player.pos]
-        for item in self.player.inventory:
+        for item in self.player.inventory[:]:
             if item.name.lower() == itemName.lower():
                 self.player.inventory.remove(item)
                 room.items.append(item)
@@ -305,7 +305,7 @@ Command list:
                 else:
                     print(f"You dropped {item.name}")
                 return
-        print(f"You do not have have {item.name}")
+        print(f"You do not have have {item.name}")    
     # Show player's inventory
     def inventory(self):
         print("Inventory:")
