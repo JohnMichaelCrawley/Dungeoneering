@@ -14,6 +14,9 @@
 
 Dungeoneering is a text adventure game written in Python & JSON made by John Crawley. The purpose is you choose between human (no special attacks and this play style is the hardest), mage (magic), warrior (battle ready) or ranger (play by distance), you go around the entire dungeon and build up your character, find loot and find the boss key to be able to take on the final boss in the game
 
+If you would like to see the current development roadmap of this project, kindly visit the [development roadmap](https://github.com/users/JohnMichaelCrawley/projects/2/views/1)
+
+
 # Demo
 ![](Demo.gif)
 
