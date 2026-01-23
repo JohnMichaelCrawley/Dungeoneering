@@ -75,6 +75,18 @@ If you require help, enter the command 'help' and it will display a list of comm
             room.x, room.y = nx, ny
             normalised[(nx, ny)] = room
         self.dungeon = normalised
+        ## ensure full map
+        full = {}
+        for yy in range(MAPSIZE):
+            for xx in range(MAPSIZE):
+                full[(xx, yy)] = self.dungeon.get((xx, yy), Room(xx, yy))
+        self.dungeon = full
+        
+        # normalise player position 
+        startPOS = next(iter(self.dungeon.keys()))
+        self.player.pos = startPOS
+        self.dungeon[startPOS].visited = True
+        
         rooms = list(self.dungeon.values())    
         # Reset rooms
         for room in rooms:
@@ -134,10 +146,19 @@ If you require help, enter the command 'help' and it will display a list of comm
         # key room 
         keyRoom = random.choice([room for room in rooms if not room.boss])
         keyRoom.items.append(Item("Boss Key", "key"))
+        #startPOS = next(iter(self.dungeon.keys()))
+        #self.player.pos = startPOS
+        #self.dungeon[startPOS].visited = True  
         
-        startPOS = next(iter(self.dungeon.keys()))
-        self.player.pos = startPOS
-        self.dungeon[startPOS].visited = True          
+        
+        
+        
+        
+        
+        
+        
+        
+                
     # Help command to learn about other commannds
     def help(self):
         print("""
@@ -157,6 +178,7 @@ Command list:
 ###################""")
     # Move somewhere
     def move(self, direction):
+        
         x, y = self.player.pos
         directions = { 
             "north":(0, -1), 
@@ -247,10 +269,14 @@ Command list:
         if self.player.weapon:
             damage += self.player.weapon.power
         enemy.hp -= damage
-        print(f"You hit the {enemy.name} for {damage} damage")  
+        print(f"You hit the {enemy.name} for {damage} damage")
         if enemy.alive():
             self.player.hp -= enemy.attack
-            print(f"The {enemy.name} hits you for {enemy.attack} damage")  
+            print(f"The {enemy.name} hits you for {enemy.attack} damage")
+            print("--------------------------------------------")
+            print(f"{enemy.name}'s health is {enemy.hp}")
+            print(f"Your health is now at {self.player.hp}")
+            print("--------------------------------------------")
             if self.player.hp <= 0:
                 print(f"\nYou have been slain by {enemy.name}...") 
                 exit()
@@ -355,20 +381,33 @@ Command list:
         print(f"You do not have {itemName}")
     # See dungeon map ▼
     def map(self):
-        horizontal = "+" + "---+" * MAPSIZE
-        print("\nDungeon Map:\n")
-        for y in range(MAPSIZE):
-            print(horizontal)
-            row = "|"
-            for x in range(MAPSIZE):
+        width = MAPSIZE
+        # build the horzintaol grid row dynamically
+        horizontal = "+" + "---+" * width
+        # frame width based on grid
+        framedWidth = len("## " + horizontal + " ##")
+        # border line
+        border = "#" * framedWidth
+        print("\nDungeon Map:")
+        # Top border
+        print(border+"\n"+border)
+        for y in range(width):
+            print("## " + horizontal + " ##")
+            # Room row
+            row = "## |"
+            for x in range(width):
                 if (x, y) == self.player.pos:
                     row += " ▼ |"
                 elif (x, y) in self.dungeon and self.dungeon[(x, y)].visited:
                     row += " x |"
                 else:
                     row += "   |"
+            row += " ##"
             print(row)
-            print(horizontal)                   
+        # bottom grid seperator
+        print("## " + horizontal + " ##")
+        print(border+"\n"+border)          
+                             
     # See player stats  
     def stats(self):
         print("##############################")
