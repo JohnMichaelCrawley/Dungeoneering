@@ -1,0 +1,30 @@
+{
+    "human": {
+        "name": "Human",
+        "hp": 80,
+        "resource": 5,
+        "resourceName": "Will",
+        "attacks": []
+    },
+        "warrior": {
+        "name": "Warrior",
+        "hp": 90,
+        "resource": 10,
+        "resourceName": "Stamina",
+        "attacks": []
+    },
+        "mage": {
+        "name": "Mage",
+        "hp": 80,
+        "resource": 20,
+        "resourceName": "Mana",
+        "attacks": []
+    },
+        "ranger": {
+        "name": "Ranger",
+        "hp": 85,
+        "resource": 15,
+        "resourceName": "Focus",
+        "attacks": []
+    }
+}

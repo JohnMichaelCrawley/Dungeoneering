@@ -1,0 +1,51 @@
+{
+    "food": 
+    [
+        {
+            "name": "Cake",
+            "heal": 5
+        },
+        {
+            "name": "Cooked Shark",
+            "heal": 10    
+        },
+        {
+            "name": "Cooked Meat",
+            "heal": 10    
+        }
+    ],
+    "potions":
+    [
+        {
+            "name": "Health Potion",
+            "heal": 25
+        },
+        {
+            "name": "Greater Health Potion",
+            "heal": 50
+        },
+        {
+            "name": "XP Potion",
+            "xp": 1000
+        }
+    ],
+    "weapons":
+    [
+        {
+            "name": "Excalibur's Sword",
+            "playerClass": "warrior",
+            "power": 100
+        },
+        {
+            "name": "Mage's Staff",
+            "playerClass": "mage",
+            "power": 150
+        },
+        {
+            "name": "Hunter's Bow",
+            "playerClass": "ranger",
+            "power": 120
+        }
+    ]
+
+}

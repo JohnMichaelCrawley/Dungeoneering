@@ -1,0 +1,46 @@
+{
+    "enemies": [
+        {
+            "name": "Rat",
+            "baseHP": 1,
+            "baseAttack": 1,
+            "baseXP": 5
+        },
+        {
+            "name": "Imp",
+            "baseHP": 1,
+            "baseAttack": 1,
+            "baseXP": 5
+        },
+        {
+            "name": "Skeleton",
+            "baseHP": 10,
+            "baseAttack": 3,
+            "baseXP": 15
+        },
+        {
+            "name": "Goblin",
+            "baseHP": 10,
+            "baseAttack": 5,
+            "baseXP": 22
+        },
+        {
+            "name": "Cultist",
+            "baseHP": 14,
+            "baseAttack": 5,
+            "baseXP": 30
+        },
+        {
+            "name": "Orge",
+            "baseHP": 22,
+            "baseAttack": 30,
+            "baseXP": 50
+        },
+        {
+            "name": "Zombie",
+            "baseHP": 20,
+            "baseAttack": 5,
+            "baseXP": 10
+        }
+    ]
+}
