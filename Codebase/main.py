@@ -6,12 +6,9 @@ Description:
 This file is the main area where the game actually is run through and 
 creating the game loop
 """
-import os
-import json
-from GameEngine import GameEngine
-from Player.Player import Player
-from Player.xpForLevel import xpForLevel
-from jsonLoader import loadPlayerClasses
+from Engine.engine import GameEngine
+
+
 def main():
     game = GameEngine()
     game.title()
