@@ -37,7 +37,8 @@ def save(self):
         }      
     data = {
         "player": self.player.toDict(),
-        "dungeon": dungeonData
+        "dungeon": dungeonData,
+        "dungeonSize": self.mapSize
     }
     with open(SAVEFILE, "w") as f:
         json.dump(data, f, indent=2)
@@ -49,6 +50,8 @@ def load(self):
         data = json.load(f)    
     # restore data
     self.player = Player.fromDict(data["player"])
+    # Restore dungeon
+    self.mapSize = data.get("dungeonSize", "small")
     self.dungeon = {}
     # rebuild rooms
     for key, roomData in data["dungeon"].items():

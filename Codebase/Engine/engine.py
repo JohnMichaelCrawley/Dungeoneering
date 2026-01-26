@@ -100,7 +100,7 @@ class GameEngine:
     def _titleScreen(self, stdscr):
         curses.curs_set(0)
         introText = [
-            "Version: [In-Development] | Date released: [] | Last Update: []",
+            "Version: 0.1.0.alpha | Date released: [] | Last Update: []",
             "",
             "DUNGEONEERING: A text adventure game by John Crawley, built using Python & JSON as a fun project to work on.",
             "",
