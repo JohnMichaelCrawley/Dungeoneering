@@ -7,7 +7,7 @@ This file is used to help shape the player, initialise the player, give the abil
 to save player's data to dictionary and to allow player to gain XP 
 """
 from Player.xpForLevel import xpForLevel
-
+from Item.Item import Item
 class Player:
     
     def __init__(self, playerName, playerClass):
@@ -70,4 +70,12 @@ class Player:
             player.pos = tuple(data["pos"])
         else:
             player.pos = (0, 0)
+        player.inventory = []
+        for itemName in data.get("inventory", []):
+            itemType = "key" if "key" in itemName else "consumable"        
+            player.inventory.append(Item(itemName, itemType))
+        if data.get("weapon"):
+            player.weapon = Item(data["weapon"], "weapon")
+        else:
+            player.weapon = None
         return player
