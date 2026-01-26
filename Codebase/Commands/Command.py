@@ -22,7 +22,16 @@ class Commands:
                 if not direction: 
                     print ("Go where?\n(north, south, east, west)")
                     return 
-                self.game.move(cmd[1])
+               # create aliases dictionary to shorten command typing
+               # so instead of "go north" you can type "go n"
+                aliases = {
+                    "n": "north",
+                    "s": "south",
+                    "e": "east",
+                    "w": "west"
+               }
+                direction = aliases.get(direction.lower(), direction.lower())
+                self.game.move(direction)         
             case "look":
                 self.game.look()
             case "attack":

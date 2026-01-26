@@ -8,9 +8,30 @@ This file handles the output of the player's iventory, what items the
 player is currently holding
 
 """
+
+
+PANELWIDTH = 70
+# Inventory - display items in inventory and display duplicates
 def inventory(self):
-    print("Inventory:")
-    for inventory in self.player.inventory:
-        print(f"- {inventory.name}")
+    print("\n")
+    print("#" * PANELWIDTH)
+    print(f"| {'Inventory'.ljust(PANELWIDTH - 4)} |")
+    print("-" * PANELWIDTH)
     if not self.player.inventory:
-        print("You don't currently have anything in your inventory.")
+        print(f"| {'You do not currently have anything in your inventory.'.ljust(PANELWIDTH - 4)} |")
+        print("#" * PANELWIDTH)
+        print()
+        return
+    # count duplicate items in inventory
+    itemCounts = {}
+    for item in self.player.inventory:
+        itemCounts[item.name] = itemCounts.get(item.name, 0) + 1
+    # print stacked items
+    for itemName, count in itemCounts.items():
+        if count > 1:
+            line = f"- {itemName} (x{count})"
+        else:
+            line = f"- {itemName}"
+        print(f"| {line.ljust(PANELWIDTH - 4)} |")
+    print("#" * PANELWIDTH)
+    print("\n")

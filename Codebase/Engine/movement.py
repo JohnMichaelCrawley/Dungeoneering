@@ -8,10 +8,8 @@ This file handles the player's movement throughout the
 dungeon 
 
 """
-
 # Move somewhere
 def move(self, direction):
-    
     x, y = self.player.pos
     directions = { 
         "north":(0, -1), 

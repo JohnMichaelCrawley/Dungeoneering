@@ -37,7 +37,7 @@ def checkForSaveFile(self):
         return False
     print("Save file found!")
     print("[1] Continue")
-    print("[2] New Game")
+    print("[2] New Game") 
     print("[3] Delete save file")
     while True:
         choice = input("> ").strip()   
@@ -58,5 +58,6 @@ def checkForSaveFile(self):
                 if confirm == "yes":
                     os.remove(SAVEFILE)
                     self.setupNewGame();
+                    return False
         else:
             print("Invalid choice - enter 1 or 3")   

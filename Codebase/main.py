@@ -7,21 +7,10 @@ This file is the main area where the game actually is run through and
 creating the game loop
 """
 from Engine.engine import GameEngine
-
-
+# Main 
 def main():
     game = GameEngine()
     game.title()
-    game.checkForSaveFile()
-    
-    # Game is running and player runs commands
-    while True:
-        cmd = input("\n> ").lower().split()
-        game.clearScreenOutput()
-        game.title()
-        if not cmd:
-            continue
-        game.commands.execute(cmd)
-        
+    game.checkForSaveFile()   
 if __name__ == "__main__":
         main() 
