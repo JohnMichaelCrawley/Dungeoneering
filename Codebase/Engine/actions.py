@@ -71,18 +71,22 @@ def drop(self, itemName):
                 print(f"You dropped {item.name}")
             return
     print(f"You do not have have {item.name}")    
+
+
+
 # DRY function - consume item for player
 def consumeItemForPlayer(self, itemName, requiredType):
     itemName = itemName.lower()
     verb = "ate" if requiredType == "food" else "drank"
     for item in self.player.inventory:
         if item.name.lower() == itemName: 
-            # wrong item type
-            if item.type != requiredType:
-                print("You cannot {verb} {item.name}")
-                return       
+            
+            
+            if (requiredType == "potion" and item.type not in ["potion", "consumable"]) or (requiredType == "food" and item.type not in ["food", "consumable"]):
+                print(f"You cannot {verb} {itemName}")
+                return    
             # Apply healing
-            if item.heal:
+            if hasattr(item, "heal") and item.heal:
                 self.player.hp = min(self.player.maxHP, self.player.hp + item.heal)           
             # apply potion 
             if hasattr(item, "xp") and item.xp:
@@ -94,6 +98,12 @@ def consumeItemForPlayer(self, itemName, requiredType):
             return 
             #print(f"You used {item.name}") 
     print(f"You do not have {itemName} in your inventory")
+
+
+
+
+
+
 # Eat items
 def eat(self, foodName):
     self.consumeItemForPlayer(foodName, "food") 
@@ -110,4 +120,4 @@ def equip(self, itemName):
             self.player.weapon = item
             print(f"You equipped {item.name}") 
             return 
-    print(f"You do not have {itemName}")
+    print(f"You do not have {itemName} in your inventory")
