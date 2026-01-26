@@ -18,7 +18,7 @@ If you would like to see the current development roadmap of this project, kindly
 
 
 # Demo
-![](Demo.gif)
+![](GameDemo.gif)
 
 ## Tech Stack
 - Python
