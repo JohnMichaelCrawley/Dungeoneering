@@ -11,7 +11,7 @@ import builtins
 import contextlib
 from Engine.ui import LOGO, uiRenderHeader, uiGetHeaderHeight
 from Engine.setup import setupNewGame, clearScreenOutput
-from Engine.saveSystem import save, checkForSaveFile
+from Engine.saveSystem import save, checkForSaveFile, load
 from Commands.Command import Commands
 from jsonLoader import loadEnemiesToGame, loadItemsToGame
 from Engine.mapSizeConfig import MAPSIZES
@@ -50,6 +50,7 @@ class GameEngine:
         self.map = map.__get__(self)
         self.stats = stats.__get__(self)
         self.save = save.__get__(self)
+        self.load = load.__get__(self)
         self.checkForSaveFile = checkForSaveFile.__get__(self)
         self.setupNewGame = setupNewGame.__get__(self)
         self.clearScreenOutput = clearScreenOutput.__get__(self)
@@ -75,6 +76,11 @@ class GameEngine:
         # Patch print/input so game logic uses curses UI
         with self._patchedStdio():
             self.checkForSaveFile()
+            if self.player is None:
+                self.setupNewGame()
+            assert self.player is not None, "Player failed to initialise"
+            if self.player and not hasattr(self.player, "pos"):
+                self.player.pos = (0, 0)
             self.commandLoop()
     # Setup Curses - Configure curses display settings (colors, input mode, redraw)
     def _setupCurses(self, stdscr):

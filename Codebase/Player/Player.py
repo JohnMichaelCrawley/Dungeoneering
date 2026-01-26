@@ -13,18 +13,14 @@ class Player:
     def __init__(self, playerName, playerClass):
         self.name = playerName
         self.playerClass = playerClass["name"]
-        
         self.level = 1
         self.xp = 0
         self.hp = playerClass["hp"]
         self.maxHP = playerClass["hp"]
-        
         self.resource = playerClass["resource"]
         self.maxResource = playerClass["resource"]
         self.resourceName = playerClass["resourceName"]
-        
         self.attacks = playerClass["attacks"]
-       
         self.inventory = []
         self.weapon = None
         self.pos = (0,0)
@@ -35,7 +31,7 @@ class Player:
             self.level += 1;
             self.maxHP += 5;
             self.hp = self.maxHP
-            print(f"\nCongrats! You reached {self.level}")
+            print(f"\nCongrats! You reached level {self.level}")
     # To Dictionary 
     def toDict(self):
         return {
@@ -51,8 +47,7 @@ class Player:
             "pos": list(self.pos),
             "inventory": [item.name for item in self.inventory],
             "weapon": self.weapon if self.weapon else None
-        }
-        
+        } 
     @classmethod
     def fromDict(playerClass, data):
         player = playerClass(
@@ -71,5 +66,8 @@ class Player:
         player.maxHP = data["maxHP"]
         player.resource = data["resource"]
         player.maxResource = data["maxResource"]
-        player.pos = tuple(data["pos"])
+        if "pos" in data and data["pos"] is not None:
+            player.pos = tuple(data["pos"])
+        else:
+            player.pos = (0, 0)
         return player
