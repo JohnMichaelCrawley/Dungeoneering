@@ -74,10 +74,12 @@ class Commands:
             case "stats":
                 self.game.stats()
             case "quit" | "exit" | "q":
-                print("Saving game progress...")
-                self.game.save()
-                print("Progress saved")
-                exit()
+                #print("Saving game progress...")
+                #self.game.save()
+                #print("Progress saved")
+                print("Quitting game")
+                self.game._running = False
+                raise SystemExit
             case "save":
                 print("Saving progress...")
                 self.game.save()

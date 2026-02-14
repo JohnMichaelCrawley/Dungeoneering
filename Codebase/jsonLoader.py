@@ -13,7 +13,6 @@ def loadJsonFileToGame(file):
     path = os.path.join(baseDir, "data", file)
     with open (path, "r") as f:
         return json.load(f)
-
 # load player classes into the game
 def loadPlayerClasses():
     return loadJsonFileToGame("PlayerClasses.json")

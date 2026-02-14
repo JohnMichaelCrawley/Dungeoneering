@@ -8,6 +8,7 @@ to save player's data to dictionary and to allow player to gain XP
 """
 from Player.xpForLevel import xpForLevel
 from Item.Item import Item
+
 class Player:
     
     def __init__(self, playerName, playerClass):
@@ -45,11 +46,13 @@ class Player:
             "maxResource": self.maxResource,
             "resourceName": self.resourceName,
             "pos": list(self.pos),
-            "inventory": [item.name for item in self.inventory],
-            "weapon": self.weapon if self.weapon else None
+            # "inventory": [item.name for item in self.inventory],
+            "inventory": [item.toDict() for item in self.inventory],
+            "weapon": self.weapon.toDict() if self.weapon else None
         } 
     @classmethod
     def fromDict(playerClass, data):
+        from Engine.saveSystem import loadItems
         player = playerClass(
             playerName = data["name"],
             playerClass={
@@ -70,12 +73,32 @@ class Player:
             player.pos = tuple(data["pos"])
         else:
             player.pos = (0, 0)
+        
         player.inventory = []
+        for itemData in data.get("inventory", []):
+            #player.inventory.append(Item(itemData["name"], itemData["type"]))
+            player.inventory.append(loadItems(itemData["name"], itemData["type"]))
+        player.weapon = None
+        
+        if data.get("weapon"):
+            weaponName = data["weapon"]["name"]
+            for item in player.inventory:
+                if item.name == weaponName and item.type == "weapon":
+                    player.weapon = item
+                    player.inventory.remove(item)
+                    break
+            # player.weapon = Item(data["weapon"]["name"], data["weapon"]["type"])
+        else:
+            player.weapon = None
+        return player
+"""     old code   
         for itemName in data.get("inventory", []):
             itemType = "key" if "key" in itemName else "consumable"        
             player.inventory.append(Item(itemName, itemType))
+            
         if data.get("weapon"):
             player.weapon = Item(data["weapon"], "weapon")
         else:
             player.weapon = None
-        return player
+        return player"""
+        

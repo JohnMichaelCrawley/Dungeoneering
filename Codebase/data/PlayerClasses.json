@@ -18,7 +18,12 @@
         "hp": 80,
         "resource": 20,
         "resourceName": "Mana",
-        "attacks": []
+        "attacks": [
+            {"name": "Arcane Blast", "cost": 10, "min": 12, "max": 20},
+            {"name": "Fire Attack", "cost": 20, "min": 20, "max": 30},
+            {"name": "Fu-Rah-Shah", "cost": 100, "min": 1, "max": 100},
+            {"name": "Holy Attack", "cost": 30, "min": 30, "max": 40}
+        ]
     },
         "ranger": {
         "name": "Ranger",

@@ -33,16 +33,19 @@
     [
         {
             "name": "Excalibur's Sword",
+            "type": "weapon",
             "playerClass": "Warrior",
             "power": 100
         },
         {
             "name": "Mage's Staff",
+            "type": "weapon",
             "playerClass": "Mage",
             "power": 150
         },
         {
             "name": "Hunter's Bow",
+            "type": "weapon",
             "playerClass": "Ranger",
             "power": 120
         }

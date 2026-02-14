@@ -18,6 +18,7 @@ commands = [
     ("[take] <item> / [take all]", "Pick up an item"),  
     ("[eat] <food>", "Eat food to restore HP"),  
     ("[drink] <potion>", "Drink to restore or increase stats"), 
+    ("[equip] <weapon", "Equip your player class weapon"),
     ("[map]", "View dungeon map"),
     ("[stats]", "View your character's stats"),  
     ("[save]", "Save your game progress")   

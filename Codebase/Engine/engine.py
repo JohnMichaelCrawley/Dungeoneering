@@ -66,13 +66,19 @@ class GameEngine:
         self._running = True
     # Title - Start curses UI and launch the game engine
     def title(self):
-        curses.wrapper(self._cursesMain)
+        try:
+            curses.wrapper(self._cursesMain)
+        except (KeyboardInterrupt, SystemExit):
+            print("Game excited")
+            return
+            
     # Curses Main - Main curses entry point — sets up UI and runs game loop
     def _cursesMain(self, stdscr):
         self._stdscr = stdscr
         self._setupCurses(stdscr)
-        # Title screen (curses)
         self._titleScreen(stdscr)
+        if not self._running:
+            return 
         # Patch print/input so game logic uses curses UI
         with self._patchedStdio():
             self.checkForSaveFile()
@@ -115,7 +121,11 @@ class GameEngine:
         ]
         while True:
             uiRenderHeader(stdscr, LOGO, introText)
-            key = stdscr.getch()
+            try:
+                key = stdscr.getch()
+            except KeyboardInterrupt:
+                self._running = False
+                return
             if key == curses.KEY_RESIZE:
                 continue
             if key in (10, 13, curses.KEY_ENTER):
@@ -129,17 +139,19 @@ class GameEngine:
     def commandLoop(self):
         self._lastPrompt = "> "
         self._uiPrint("")
-        self._uiPrint("Type 'help' for commands. Resize anytime.")
+        self._uiPrint("Type 'help' for command list")
         self._uiPrint("")
         while self._running:
-            cmd = self._uiInput("> ").strip()
-            if not cmd:
-                continue
-            tokens = cmd.split()
             try:
+                cmd = self._uiInput("> ").strip()
+                if not cmd:
+                    continue
+                tokens = cmd.split()
+        
                 self.commands.execute(tokens)
-            except SystemExit:
+            except (KeyboardInterrupt,  SystemExit):
                 self._running = False
+                return
             except Exception as e:
                 self._uiPrint(f"[Error] {e}")
     # Patch print() and input() so they render inside curses UI

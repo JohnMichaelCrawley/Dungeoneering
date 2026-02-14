@@ -11,12 +11,39 @@ and check for save files
 
 import json 
 import os
-from Player.Player import Player
 from Room.Room import Room
 from Item.Item import Item
 from Enemy.Enemy import Enemy
 
 SAVEFILE = "savefile.json"
+# Load Items
+def loadItems(name, itemType):
+    dir = os.path.dirname(os.path.abspath(__file__))
+    path = os.path.join(dir, "..", "data", "Items.json")
+    try:
+        with open(path) as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        print(f"[WARNING] Items.json is not found at {path}")
+    
+    
+    
+    for category in data.values():
+        for entry in category:
+            if entry["name"] == name:
+                return Item(
+                    name=entry["name"],
+                    #(old) itemType=itemType,
+                    itemType=entry.get("type", itemType),
+                    heal=entry.get("heal", 0),
+                    xp=entry.get("xp", 0),
+                    power=entry.get("power", 0),
+                    playerClass=entry.get("playerClass")
+                )
+    return Item(name, itemType)
+        
+
+
 # Save game
 def save(self):
     dungeonData = {}
@@ -38,18 +65,43 @@ def save(self):
     data = {
         "player": self.player.toDict(),
         "dungeon": dungeonData,
-        "dungeonSize": self.mapSize
+        "dungeonSize": self.mapSize,
+        # save equipped weapon
+        "weaponEquipped": (
+            {"name": self.player.weapon.name, "type": self.player.weapon.type}
+            if self.player.weapon else None
+        )
     }
     with open(SAVEFILE, "w") as f:
         json.dump(data, f, indent=2)
 # Load the save file
 def load(self):
+    from Player.Player import Player
     if not os.path.exists(SAVEFILE):
         return False
-    with open(SAVEFILE, "r") as f:
-        data = json.load(f)    
-    # restore data
+    try:
+        with open(SAVEFILE, "r") as f:
+            data = json.load(f)    
+    except json.JSONDecodeError:
+        print("Save file is corrupted. Starting new game")
+        return False
+    # restore player
     self.player = Player.fromDict(data["player"])
+    # Restore equipped weapon
+    equippedWeapon = data.get("weaponEquipped")
+    if equippedWeapon:
+        weapon = loadItems(equippedWeapon["name"], equippedWeapon["type"])
+        self.player.weapon = weapon
+        # remove weapon from inventory if duplicates
+        self.player.inventory = [
+            item for item in self.player.inventory
+            if item.name != weapon.name
+        ]
+        
+        # self.player.weapon = loadItems(equippedWeapon["name"], equippedWeapon["type"])
+    else:
+        self.player.weapon = None
+    
     # Restore dungeon
     self.mapSize = data.get("dungeonSize", "small")
     self.dungeon = {}
@@ -62,7 +114,9 @@ def load(self):
         room.locked = roomData.get("locked", False) 
         room.items = []
         for itemName in roomData.get("items", []):
-            room.items.append(Item(itemName, "key" if "Key" in itemName else "consumable"))
+            #(old code) room.items.append(Item(itemName, "key" if "Key" in itemName else "consumable"))
+            itemType = "key" if "Key" in itemName else "consumable"
+            room.items.append(loadItems(itemName, itemType))
         # re-add enemies
         room.enemies = []
         for enemyData in roomData.get("enemies", []):
@@ -73,11 +127,18 @@ def load(self):
                 baseAttack=0,
                 baseXP=enemyData.get("xp", 0)
             )
-            enemy.hp = enemyData.get("hp", enemy.hp)
+            savedHP = enemyData.get("hp", enemy.hp)
+            enemy.hp = min(savedHP, enemy.maxHP)  
+
             if hasattr(enemy, "xp"):
                 enemy.xp = enemyData.get("xp", enemy.xp)
+
             if enemy.hp > 0:
                 room.enemies.append(enemy)
+                    
+        
+        
+        
         self.dungeon[(x, y)] = room
     return True 
 
@@ -92,6 +153,11 @@ def checkForSaveFile(self):
     print("[3] Delete save file")
     while True:
         choice = input("> ").strip()   
+       
+        if choice in ("q", "quit", "exit"):
+            print("Quitting game")
+            raise SystemExit       
+       
         if choice == "1":
             if self.load():
                 print(f"Welcome back, {self.player.name} the {self.player.playerClass}")

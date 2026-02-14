@@ -16,3 +16,10 @@ class Item:
         self.xp = xp
         self.power = power
         self.playerClass = playerClass
+        
+    # To Dictionary 
+    def toDict(self):
+        return {
+            "name": self.name,
+            "type": self.type
+        }

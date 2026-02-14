@@ -71,17 +71,12 @@ def drop(self, itemName):
                 print(f"You dropped {item.name}")
             return
     print(f"You do not have have {item.name}")    
-
-
-
 # DRY function - consume item for player
 def consumeItemForPlayer(self, itemName, requiredType):
     itemName = itemName.lower()
     verb = "ate" if requiredType == "food" else "drank"
     for item in self.player.inventory:
         if item.name.lower() == itemName: 
-            
-            
             if (requiredType == "potion" and item.type not in ["potion", "consumable"]) or (requiredType == "food" and item.type not in ["food", "consumable"]):
                 print(f"You cannot {verb} {itemName}")
                 return    
@@ -98,12 +93,6 @@ def consumeItemForPlayer(self, itemName, requiredType):
             return 
             #print(f"You used {item.name}") 
     print(f"You do not have {itemName} in your inventory")
-
-
-
-
-
-
 # Eat items
 def eat(self, foodName):
     self.consumeItemForPlayer(foodName, "food") 
@@ -112,12 +101,32 @@ def drink(self, potionName):
     self.consumeItemForPlayer(potionName, "potion") 
 # Equip item
 def equip(self, itemName):
+    def normalise(text):
+        return str(text).strip().lower().replace("’", "'")
+   # normaliseInput = normalise(itemName)
+    
+    target = normalise(itemName)
+    
+    # Check if it's already equipped 
+    if self.player.weapon and normalise(self.player.weapon.name) == target:
+        print(f"You already have {self.player.weapon.name} equipped!")
+        return
+    
     for item in self.player.inventory:
-        if item.name.lower() == itemName.lower() and item.type == "weapon":
-            if item.playerClass != self.player.playerClass:
-                print(f"You cannot equip {item.name} as {self.player.playerClass}")
-                return
-            self.player.weapon = item
-            print(f"You equipped {item.name}") 
-            return 
+        if normalise(item.name) != target:
+            continue
+        if item.type.lower() != "weapon":
+            print(f"{item.name} cannot be equipped")
+            return
+            
+        playerClass = normalise(self.player.playerClass)
+        itemClass   = normalise(item.playerClass or "")
+            
+        if itemClass and playerClass != itemClass:
+            print(f"You cannot equip {item.name} as {self.player.playerClass}")
+            return
+        
+        self.player.weapon = item
+        print(f"You equipped {item.name}")
+        return
     print(f"You do not have {itemName} in your inventory")

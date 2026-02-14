@@ -9,8 +9,12 @@ creating the game loop
 from Engine.engine import GameEngine
 # Main 
 def main():
-    game = GameEngine()
-    game.title()
-    game.checkForSaveFile()   
+    try:
+        game = GameEngine()
+        game.title() 
+    except (KeyboardInterrupt, SystemExit):
+        print("Exited the game!..")
+        
+    
 if __name__ == "__main__":
         main() 

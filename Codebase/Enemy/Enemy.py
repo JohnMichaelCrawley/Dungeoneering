@@ -14,6 +14,9 @@ class Enemy:
         self.maxHP = baseHP + (level * 4)
         self.hp = self.maxHP
         
+        self.minDamage = baseAttack 
+        self.maxDamage = baseAttack + 2
+        
         self.attack = baseAttack + (level * 2)
         self.xp = baseXP + (level * 8)
 
