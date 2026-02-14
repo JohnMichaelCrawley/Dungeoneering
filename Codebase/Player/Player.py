@@ -33,11 +33,13 @@ class Player:
             self.level += 1
             self.maxHP += 5
             self.hp = self.maxHP      
-            levelsGained = self.level - startLevel
+        levelsGained = self.level - startLevel
         if levelsGained == 1:
             print(f"\nCongrats! You reached level {self.level}")
         elif levelsGained > 1:
             print(f"\nYou jumped from level {startLevel} to level {self.level}!")
+    
+    
     # To Dictionary 
     def toDict(self):
         return {
