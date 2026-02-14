@@ -37,7 +37,7 @@ class Player:
         if levelsGained == 1:
             print(f"\nCongrats! You reached level {self.level}")
         elif levelsGained > 1:
-            print(f"\nYou jumped from {startLevel} to level {self.level}!")
+            print(f"\nYou jumped from level {startLevel} to level {self.level}!")
     # To Dictionary 
     def toDict(self):
         return {
