@@ -53,6 +53,11 @@ class Player:
     @classmethod
     def fromDict(playerClass, data):
         from Engine.saveSystem import loadItems
+        from jsonLoader import loadPlayerClasses
+        
+        classes = loadPlayerClasses()
+        classData = classes[data["playerClass"].lower()]
+        
         player = playerClass(
             playerName = data["name"],
             playerClass={
@@ -60,7 +65,7 @@ class Player:
                 "hp": data["hp"],
                 "resource": data["maxResource"],
                 "resourceName": data["resourceName"],
-                "attacks": []
+                "attacks": data.get("attacks") or classData["attacks"]
             }
         )
         player.level = data["level"]
