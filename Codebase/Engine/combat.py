@@ -51,6 +51,7 @@ def chooseAttack(self):
         print("Invalid choice")
 # Attack enemy    
 def attack(self, index=0):
+    from Engine.setup import gameOverMenu
     PANELWIDTH = 70
     room = self.dungeon[self.player.pos]
     if not room.enemies:
@@ -95,7 +96,7 @@ def attack(self, index=0):
             room.enemies.remove(enemy)
             if room.boss:
                 print("\nYou have cleared the dungeon!")
-                self.gameOverMenu()
+                gameOverMenu(self)
                 return 
             return
         # enemy turn 
@@ -105,7 +106,7 @@ def attack(self, index=0):
             print(f"{enemy.name} hits you for {enemyDamage} damage")
             if self.player.hp <= 0:
                 print(f"You were slain by {enemy.name}...")
-                self.gameOverMenu()
+                gameOverMenu(self)
                 return 
         
         
