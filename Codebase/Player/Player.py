@@ -28,11 +28,16 @@ class Player:
     # Gain XP 
     def gainXP(self, amount):
         self.xp += amount
+        startLevel = self.level 
         while self.xp >= xpForLevel(self.level + 1):
-            self.level += 1;
-            self.maxHP += 5;
-            self.hp = self.maxHP
+            self.level += 1
+            self.maxHP += 5
+            self.hp = self.maxHP      
+            levelsGained = self.level - startLevel
+        if levelsGained == 1:
             print(f"\nCongrats! You reached level {self.level}")
+        elif levelsGained > 1:
+            print(f"\nYou jumped from {startLevel} to level {self.level}!")
     # To Dictionary 
     def toDict(self):
         return {
