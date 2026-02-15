@@ -17,4 +17,4 @@ def stats(self):
         f"XP: {self.player.xp}",
         f"HP: {self.player.hp}/{self.player.maxHP}"
     ]
-    panel("Player Stats", lines)
+    panel("Player Stats:", lines)

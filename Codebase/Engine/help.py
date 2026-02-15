@@ -42,5 +42,5 @@ def help(self):
     lines.append("")
     for example in examples:
         lines.append(f"- {example}")
-    panel("Help - Command List", lines)
+    panel("Help - Command List:", lines)
     

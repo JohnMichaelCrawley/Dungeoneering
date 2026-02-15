@@ -19,7 +19,7 @@ def inventory(self):
     # no items 
     if not self.player.inventory:
         lines.append("You do not currently have anything in your inventory")
-        panel("Inventory", lines)
+        panel("Inventory:", lines)
         return
     # count duplicates 
     itemCounts = {}
@@ -29,7 +29,7 @@ def inventory(self):
         itemCounts[item.name] = itemCounts.get(item.name, 0) + 1
     if not itemCounts:
         lines.append("You do not currently have anything in your inventory")
-        panel("Inventory", lines)
+        panel("Inventory:", lines)
         return
     lines.append("Items:")
     lines.append("")
@@ -38,5 +38,5 @@ def inventory(self):
             lines.append(f"- {itemName} (x{count})")
         else:
             lines.append(f"- {itemName}")
-    panel("Inventory", lines)
+    panel("Inventory:", lines)
         
