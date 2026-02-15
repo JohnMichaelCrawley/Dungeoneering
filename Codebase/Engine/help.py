@@ -7,9 +7,7 @@ Description:
 This file outputs the commands when the player enters
 'help'
 """
-
-PANELWIDTH = 70 
-COMMANDCOLWIDTH = 26 # controls align column
+from Engine.ui import panel
 commands = [
     ("[go] <direction>", "Move <north>, <south>, <east>, <west>"),
     ("[look]", "Inspect the current room"),  
@@ -31,22 +29,18 @@ examples = [
     "map",
     "stats"
 ]
-# Help command to learn about other commannds
+# function Help command to learn about other commannds
 def help(self):
-    print("\n")
-    print("#" * PANELWIDTH)
-    print(f"| {'Help - Command list'.ljust(PANELWIDTH - 4)} |")
-    print("-" * PANELWIDTH)
-    # print command list
+    COMMANDCOLWIDTH = 26 # controls align column
+    lines = []
     for command, description in commands:
-        commandPadded = command.ljust(COMMANDCOLWIDTH)
-        line = f"{commandPadded} - {description}"
-        print(f"| {line.ljust(PANELWIDTH -4)} |")
-    print("-" * PANELWIDTH)
-    # show examples
-    print(f"| {'Examples:'.ljust(PANELWIDTH - 4)} |")
+        line = f"{command.ljust(COMMANDCOLWIDTH)} - {description}"
+        lines.append(line)
+    # spacing
+    lines.append("")
+    lines.append("Examples:")
+    lines.append("")
     for example in examples:
-        exampleLine = f"-{example}"
-        print(f"| {exampleLine.ljust(PANELWIDTH - 4)} |")
-    print("#" * PANELWIDTH)
-    print("\n")
+        lines.append(f"- {example}")
+    panel("Help - Command List", lines)
+    

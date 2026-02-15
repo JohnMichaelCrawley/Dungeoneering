@@ -8,7 +8,7 @@ This file handles the player's movement throughout the
 dungeon 
 
 """
-# Move somewhere
+# function Move somewhere
 def move(self, direction):
     x, y = self.player.pos
     directions = { 

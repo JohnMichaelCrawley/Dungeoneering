@@ -14,7 +14,5 @@ def main():
         game.title() 
     except (KeyboardInterrupt, SystemExit):
         print("Exited the game!..")
-        
-    
 if __name__ == "__main__":
         main() 

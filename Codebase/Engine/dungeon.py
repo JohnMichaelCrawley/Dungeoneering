@@ -12,8 +12,7 @@ import random
 from Room.Room import Room
 from Item.Item import Item
 from Enemy.Enemy import Enemy
-
-  # Create the dungeon
+# function Create the dungeon
 def createDungeon(engine):
     size = engine.mapSize
     engine.dungeon = {}
@@ -40,18 +39,15 @@ def createDungeon(engine):
         room.x, room.y = nx, ny
         normalised[(nx, ny)] = room
     engine.dungeon = normalised
-    ## ensure full map
-    full = {}
+    full = {} # ensure full map
     for yy in range(size):
         for xx in range(size):
             full[(xx, yy)] = engine.dungeon.get((xx, yy), Room(xx, yy))
     engine.dungeon = full
-
     # normalise player position 
     startPOS = next(iter(engine.dungeon.keys()))
     engine.player.pos = startPOS
     engine.dungeon[startPOS].visited = True
-
     rooms = list(engine.dungeon.values())    
     # Reset rooms
     for room in rooms:
@@ -59,7 +55,7 @@ def createDungeon(engine):
         room.enemies.clear()
         room.boss = False
         room.locked = False     
-        # boss room
+    # boss room
     bossRoom = random.choice(rooms[1:])
     bossRoom.boss = True
     bossRoom.locked = True
@@ -69,13 +65,12 @@ def createDungeon(engine):
     potionPool = engine.itemData["potions"]
     weaponsPool = engine.itemData["weapons"].copy()
     random.shuffle(weaponsPool)
-
     for room in rooms:
         if room.boss:
             continue
         # Add Enemies to each room
         if random.random() < 0.7: # 70% chance
-            room.enemies = engine.spawnEnemies((1, 3))  
+            room.enemies = engine.spawnEnemies((1, 5))  
         # Add food
         food = random.choice(foodPool)
         room.items.append(
@@ -107,22 +102,14 @@ def createDungeon(engine):
                     playerClass=weapon["playerClass"]
                 )
             )
-
     # key room 
     keyRoom = random.choice([room for room in rooms if not room.boss])
     keyRoom.items.append(Item("Boss Key", "key"))
-    #startPOS = next(iter(self.dungeon.keys()))
-    #self.player.pos = startPOS
-    #self.dungeon[startPOS].visited = True              
-    # Help command to learn about other commannds
-    
-    
-# Spawn enemies in rooms   
+# function Spawn enemies in rooms   
 def spawnEnemies(self, enemySpawnCountRange=(1, 4)):
     enemies = []
     low, high = enemySpawnCountRange
     count = random.randint(low, high)
-    
     for _ in range(count):
         template = random.choice(self.enemyTemplates)
         level = random.randint(1, 5)
@@ -136,11 +123,10 @@ def spawnEnemies(self, enemySpawnCountRange=(1, 4)):
             )
         )
     return enemies
-# Create final boss encounter
+# function Create final boss encounter
 def createFinalBoss(self):
     template = random.choice(self.enemyTemplates)
     level = random.randint(6, 10)
-    
     return Enemy(
         name=f"Giant {template['name']}",
         level=level,

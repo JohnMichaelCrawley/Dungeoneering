@@ -8,7 +8,7 @@ This file handles the output of the current map the player is on
 and displays the map to the player with the command 'map'
 
 """
-# See dungeon map ▼
+# function See dungeon map ▼
 def map(self):
     width = self.mapSize
     # build the horzintaol grid row dynamically

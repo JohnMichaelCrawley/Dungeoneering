@@ -14,9 +14,8 @@ import os
 from Room.Room import Room
 from Item.Item import Item
 from Enemy.Enemy import Enemy
-
 SAVEFILE = "savefile.json"
-# Load Items
+# function Load Items
 def loadItems(name, itemType):
     dir = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(dir, "..", "data", "Items.json")
@@ -25,9 +24,6 @@ def loadItems(name, itemType):
             data = json.load(f)
     except FileNotFoundError:
         print(f"[WARNING] Items.json is not found at {path}")
-    
-    
-    
     for category in data.values():
         for entry in category:
             if entry["name"] == name:
@@ -41,10 +37,7 @@ def loadItems(name, itemType):
                     playerClass=entry.get("playerClass")
                 )
     return Item(name, itemType)
-        
-
-
-# Save game
+# function Save game
 def save(self):
     dungeonData = {}
     for (x, y), room in self.dungeon.items():
@@ -74,7 +67,7 @@ def save(self):
     }
     with open(SAVEFILE, "w") as f:
         json.dump(data, f, indent=2)
-# Load the save file
+# function Load the save file
 def load(self):
     from Player.Player import Player
     if not os.path.exists(SAVEFILE):
@@ -97,11 +90,8 @@ def load(self):
             item for item in self.player.inventory
             if item.name != weapon.name
         ]
-        
-        # self.player.weapon = loadItems(equippedWeapon["name"], equippedWeapon["type"])
     else:
-        self.player.weapon = None
-    
+        self.player.weapon = None 
     # Restore dungeon
     self.mapSize = data.get("dungeonSize", "small")
     self.dungeon = {}
@@ -114,7 +104,6 @@ def load(self):
         room.locked = roomData.get("locked", False) 
         room.items = []
         for itemName in roomData.get("items", []):
-            #(old code) room.items.append(Item(itemName, "key" if "Key" in itemName else "consumable"))
             itemType = "key" if "Key" in itemName else "consumable"
             room.items.append(loadItems(itemName, itemType))
         # re-add enemies
@@ -129,20 +118,13 @@ def load(self):
             )
             savedHP = enemyData.get("hp", enemy.hp)
             enemy.hp = min(savedHP, enemy.maxHP)  
-
             if hasattr(enemy, "xp"):
                 enemy.xp = enemyData.get("xp", enemy.xp)
-
             if enemy.hp > 0:
                 room.enemies.append(enemy)
-                    
-        
-        
-        
         self.dungeon[(x, y)] = room
     return True 
-
-# check for save file 
+# function check for save file 
 def checkForSaveFile(self):
     if not os.path.exists(SAVEFILE):
         self.setupNewGame()
@@ -153,11 +135,9 @@ def checkForSaveFile(self):
     print("[3] Delete save file")
     while True:
         choice = input("> ").strip()   
-       
         if choice in ("q", "quit", "exit"):
             print("Quitting game")
             raise SystemExit       
-       
         if choice == "1":
             if self.load():
                 print(f"Welcome back, {self.player.name} the {self.player.playerClass}")

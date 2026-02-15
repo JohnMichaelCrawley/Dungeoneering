@@ -5,7 +5,6 @@ Date Created: 23rd Jan 2026
 Description:
 This is the main initialiser class for the game engine
 """
-
 import curses
 import builtins
 import contextlib
@@ -23,8 +22,6 @@ from Engine.inventory import inventory
 from Engine.mapRenderer import map
 from Engine.stats import stats
 from Engine.help import help
-
-
 class GameEngine:
     # initialise the game
     def __init__(self):
@@ -64,15 +61,14 @@ class GameEngine:
         self._statusLine = ""
         self._lastPrompt = ""
         self._running = True
-    # Title - Start curses UI and launch the game engine
+    # function Title - Start curses UI and launch the game engine
     def title(self):
         try:
             curses.wrapper(self._cursesMain)
         except (KeyboardInterrupt, SystemExit):
             print("Game excited")
-            return
-            
-    # Curses Main - Main curses entry point — sets up UI and runs game loop
+            return     
+    # function Curses Main - Main curses entry point — sets up UI and runs game loop
     def _cursesMain(self, stdscr):
         self._stdscr = stdscr
         self._setupCurses(stdscr)
@@ -101,8 +97,7 @@ class GameEngine:
                 stdscr.bkgd(" ", curses.color_pair(1))
         except Exception:
             pass
-
-    # Title Screen - Display the intro/title screen before starting gameplay
+    # function Title Screen - Display the intro/title screen before starting gameplay
     def _titleScreen(self, stdscr):
         curses.curs_set(0)
         introText = [
@@ -135,7 +130,7 @@ class GameEngine:
         self._pendingFragment = ""
         self._statusLine = ""
         self._render(input_text="", prompt="")
-    # Command Loop - Main command input loop — reads player commands and executes them
+    # function Command Loop - Main command input loop — reads player commands and executes them
     def commandLoop(self):
         self._lastPrompt = "> "
         self._uiPrint("")
@@ -166,7 +161,6 @@ class GameEngine:
         finally:
             builtins.print = oldPrint
             builtins.input = oldInput
-
     # UI Print - Capture printed output and store it in the log buffer
     def _uiPrint(self, *args, sep=" ", end="\n", **kwargs):
         text = sep.join(str(a) for a in args)
@@ -230,7 +224,7 @@ class GameEngine:
                 buf.insert(cursor, chr(ch))
                 cursor += 1
                 continue
-    # Render - Render the full curses UI (header, log, and input bar)
+    # function Render - Render the full curses UI (header, log, and input bar)
     def _render(self, input_text="", prompt="", cursor_pos=None):
         stdscr = self._stdscr
         stdscr.erase()

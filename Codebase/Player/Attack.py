@@ -6,7 +6,6 @@ Description:
 This is used to execute an attack on an enemy you're fighting in the game
 """
 import random 
-
 class Attack:
     def __init__(self, name, minDamage, maxDamage, cost, effect=None):
         pass
@@ -18,7 +17,6 @@ class Attack:
     # execute attack  
     def execute (self, player, enemy):
         if player.resource < self.cost:
-            return f"Not enough {player.resourceName}"
-        
+            return f"Not enough {player.resourceName}"  
         player.resource -= self.cost
         damage = random.randint(self.minDamage, self.maxDamage)

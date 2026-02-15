@@ -22,14 +22,11 @@ class Commands:
                 if not direction: 
                     print ("Go where?\n(north, south, east, west)")
                     return 
-               # create aliases dictionary to shorten command typing
-               # so instead of "go north" you can type "go n"
                 aliases = {
                     "n": "north",
                     "s": "south",
                     "e": "east",
-                    "w": "west"
-               }
+                    "w": "west"}
                 direction = aliases.get(direction.lower(), direction.lower())
                 self.game.move(direction)         
             case "look":
@@ -74,9 +71,6 @@ class Commands:
             case "stats":
                 self.game.stats()
             case "quit" | "exit" | "q":
-                #print("Saving game progress...")
-                #self.game.save()
-                #print("Progress saved")
                 print("Quitting game")
                 self.game._running = False
                 raise SystemExit

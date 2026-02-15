@@ -12,13 +12,10 @@ import os
 from Player.Player import Player
 from jsonLoader import loadPlayerClasses
 from Engine.mapSizeConfig import MAPSIZES
-
-
-PANELWIDTH = 70
+from Engine.ui import panel 
 classMenu = {"1": "human", "2": "warrior", "3": "mage", "4": "ranger" }
 sizeKeys = list(MAPSIZES.keys())
-
-# confirm options
+# function confirm options
 def confirm (prompt: str) -> bool:
     while True:
         answer = input(prompt).strip().lower()
@@ -27,21 +24,7 @@ def confirm (prompt: str) -> bool:
         if answer in ("no", "n"):
             return False
         print("Please type yes/y or no/n")
-
-
-
-
-# Panel title
-def titlePanel(text):
-    print("#" * PANELWIDTH)
-    print(f"| {text.ljust(PANELWIDTH - 4)} |")
-    print("-" * PANELWIDTH)
-# Option list
-def optionsPanel(optionsList):
-    for option in optionsList:
-        print(f"| {option.ljust(PANELWIDTH -4)} |")
-    print("#" * PANELWIDTH)
-  # Setup a new game
+# function Setup a new game
 def setupNewGame(self):   
         PLAYERCLASSES = loadPlayerClasses() 
         # Step 1: Setup player name
@@ -49,9 +32,8 @@ def setupNewGame(self):
         while True:
             # Player's setup
             # Player's name
-            titlePanel("Player setup: Enter your character's name:")
+            panel("Player setup", ["Enter your character's name:"])
             name = input("> ").strip()[:50]
-            
             if not name:
                 print("Name cannot be empty")
                 continue
@@ -60,8 +42,7 @@ def setupNewGame(self):
         print("\n")
         # Step 2: Setup player's class
         # Class setup
-        titlePanel("Player setup: Select your class:")
-        optionsPanel([
+        panel("Player setup: Select your class",[
             "[1] Human - nothing special",
             "[2] Warrior - Strong, resilient",
             "[3] Mage - Weilder of arcane powers",
@@ -77,17 +58,10 @@ def setupNewGame(self):
                 continue
             if confirm(f"Use {key.title()} as your class? (yes/no):"):
                 break
-             
-        
-             
-             
         self.player = Player(name, PLAYERCLASSES[key])   
         print("\n")
         # Step 3: Setup dungeon size
-        titlePanel("Dungeon: Choose dungeon size:")
-        optionsPanel([
-            f"[{i+1}] {size.title()}" for i, size in enumerate(sizeKeys)
-        ])
+        panel("Dungeon: Choose dungeon size", [f"[{i+1}] {size.title()}" for i, size in enumerate(sizeKeys)])
         keys = list(MAPSIZES.keys())
         while True:
             choice = input("> ").strip()
@@ -102,8 +76,7 @@ def setupNewGame(self):
             if confirm(f"Use {selected.title()} as the dungeon size? (yes/no):"):
                 self.mapSize = MAPSIZES[selected]
                 break
-            print()
-            
+            print()  
         print(f"Selected map size: {selected.title()} {self.mapSize}x")   
         print("\n") 
         self.createDungeon()
@@ -117,14 +90,7 @@ def restartGame(self):
     self.setupNewGame()
 # Game over menu, display when game is finished or player died
 def gameOverMenu(self):
-    print("\n" + "#" * PANELWIDTH)
-    print(f"| {'Game Over'.ljust(PANELWIDTH -4)} |")
-    print("-" * PANELWIDTH)
-    print(f"| {'What would you like to do?:'.ljust(PANELWIDTH - 4)} |")
-    print("-" * PANELWIDTH)
-    print(f"| {'[1] - Start new game'.ljust(PANELWIDTH - 4)} |")
-    print(f"| {'[2] - Quit game'.ljust(PANELWIDTH - 4)} |")
-    print("#" * PANELWIDTH)
+    panel("Game over", ["What would you like to do?", "", "[1] start new game?", "[2] Quit game"])
     while True:
         choice = input("> ").strip()
         match choice:
