@@ -21,9 +21,6 @@ def move(self, direction):
     newPOS = (x+dx, y+dy)
     
     if newPOS not in self.dungeon:
-        # self.player.pos = newPOS
-        #self.dungeon[newPOS].visited = True
-        #self.look()
         print("You hit a wall")
         return   
     # locked room check
@@ -32,6 +29,7 @@ def move(self, direction):
         hasKey = any(item.name == "Boss Key" for item in self.player.inventory)
         if not hasKey:
             print("The door is locked. You need to find the key to enter")
+            room.discoveredBossRoom = True
             return
         else:
             print("You unlocked the massive door")

@@ -8,8 +8,10 @@ This file handles the output of the current map the player is on
 and displays the map to the player with the command 'map'
 
 """
+from Engine.ui import panel
 # function See dungeon map ▼
 def map(self):
+    panel("Icons", ["▼ - Player", "x - Room visited", "B - Boss room"])
     width = self.mapSize
     # build the horzintaol grid row dynamically
     horizontal = "+" + "---+" * width
@@ -25,10 +27,13 @@ def map(self):
         # Room row
         row = "## |"
         for x in range(width):
+            room = self.dungeon.get((x, y))
             if (x, y) == self.player.pos:
                 row += " ▼ |"
             elif (x, y) in self.dungeon and self.dungeon[(x, y)].visited:
                 row += " x |"
+            elif room and room.discoveredBossRoom:
+                row += " B |"
             else:
                 row += "   |"
         row += " ##"

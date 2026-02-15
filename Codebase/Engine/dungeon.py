@@ -54,7 +54,8 @@ def createDungeon(engine):
         room.items.clear()
         room.enemies.clear()
         room.boss = False
-        room.locked = False     
+        room.locked = False
+        room.discoveredBossRoom = False   
     # boss room
     bossRoom = random.choice(rooms[1:])
     bossRoom.boss = True

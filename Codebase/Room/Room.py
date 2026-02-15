@@ -15,3 +15,4 @@ class Room:
         self.enemies = []
         self.boss = False
         self.locked = False
+        self.discoveredBossRoom = False
