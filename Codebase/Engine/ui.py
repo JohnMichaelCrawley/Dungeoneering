@@ -24,34 +24,54 @@ LOGO = r"""██████╗ ██╗   ██╗███╗   ██╗ �
 ██████╔╝╚██████╔╝██║ ╚████║╚██████╔╝███████╗╚██████╔╝██║ ╚████║ ███████╗ ███████╗╚██████╔╝██║  ██║██║██║ ╚████║╚██████╔╝
 ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝ ╚══════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝"""
 
+# panel markers used by the engine renderer 
+PANEL_START = "__PANEL_START__"
+PANEL_END = "__PANEL_END__"
 
-
+# function draw border box that always fits the current terminal window
+def drawBorderedBox(stdscr, start_y: int, start_x: int, lines, title=None, attr: int = 0) -> int:
+    h, w = stdscr.getmaxyx()
+    # leave 1 col safety on right, and use same left margin
+    box_width = max(10, w - start_x - 2)
+    inner_width = max(0, box_width - 4)
+    y = start_y
+    # top border
+    _drawHline(stdscr, y, start_x, box_width, attr)
+    y += 1
+    # title row
+    if title:
+        t = safeClip(str(title), inner_width)
+        _safeAddstr(stdscr, y, start_x, f"| {t.ljust(inner_width)} |", attr)
+        y += 1
+    # content rows
+    for line in lines:
+        s = str(line)
+        if s.strip() == "---":
+            _safeAddstr(stdscr, y, start_x, f"| {('-' * inner_width)} |", attr)
+            y += 1
+            continue
+        s = safeClip(s, inner_width)
+        _safeAddstr(stdscr, y, start_x, f"| {s.ljust(inner_width)} |", attr)
+        y += 1
+    # bottom border
+    _drawHline(stdscr, y, start_x, box_width, attr)
+    return y + 1
 # DRY function: UI panel output 
+# function panel 
 def panel(title=None, lines=None, footer=True):
-    PANELWIDTH = 70 
+    """
+    DO NOT print borders here.
+    We print a structured 'panel block' into the log.
+    The curses renderer will draw the bordered box dynamically on every redraw.
+    """
     if lines is None:
         lines = []
-    print("#" * PANELWIDTH)
-    if title:
-        print(f"| {title.ljust(PANELWIDTH - 4)} |")
+    print(f"{PANEL_START}{title or ''}")
     for line in lines:
-        print(f"| {line.ljust(PANELWIDTH - 4)} |")
+        print(str(line))
+    print(PANEL_END)
     if footer:
-        print("#" * PANELWIDTH)
-        print("\n")
-
-
-
-
-
-
-
-
-
-
-
-
-
+        print("")  # spacing after panel
 # terminal Size Fallback
 ## Return terminal size (cols, rows)
 def terminalSizeFallback() -> tuple[int, int]:
@@ -171,6 +191,11 @@ def uiRenderHeader(
     # Render the title header. Safe under aggressive resizing
     attr = _initBlackScreen(stdscr)
     stdscr.erase()
+    try:
+        curses.update_lines_cols()
+        curses.resize_term(0, 0)
+    except:
+        pass
     h, w = stdscr.getmaxyx()
     text_lines = text_lines or []
     # If the window is extremely small, show a minimal message.

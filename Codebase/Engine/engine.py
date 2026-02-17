@@ -22,6 +22,8 @@ from Engine.inventory import inventory
 from Engine.mapRenderer import map
 from Engine.stats import stats
 from Engine.help import help
+from Engine.ui import LOGO, uiRenderHeader, uiGetHeaderHeight, drawBorderedBox, PANEL_START, PANEL_END
+
 class GameEngine:
     # initialise the game
     def __init__(self):
@@ -242,13 +244,51 @@ class GameEngine:
         top = min(headerHeight + 1, h - 3)
         bottomInputY = h - 2
         logHeight = max(1, bottomInputY - top)
-        visible = self._logLines[-logHeight:]
-        y = top
-        for line in visible:
-            if y >= bottomInputY:
+        visible = self._logLines[-500:]
+        # Build render blocks first
+        blocks = []
+        i = 0
+        while i < len(visible):
+            line = visible[i]
+            if line.startswith(PANEL_START):
+                title = line[len(PANEL_START):].strip() or None
+                i += 1
+                block_lines = []
+                while i < len(visible) and visible[i] != PANEL_END:
+                    block_lines.append(visible[i])
+                    i += 1
+                if i < len(visible) and visible[i] == PANEL_END:
+                    i += 1
+                blocks.append(("panel", title, block_lines))
+            else:
+                blocks.append(("line", line))
+                i += 1
+        # now scroll from bottom
+        render_queue = []
+        height_used = 0
+        for block in reversed(blocks):
+            if block[0] == "line":
+                needed = 1
+            else:
+                needed = len(block[2]) + 3  # panel height estimate
+            if height_used + needed > logHeight:
                 break
-            self._safeAddstr(y, 2, line, w)
-            y += 1
+            render_queue.append(block)
+            height_used += needed
+        render_queue.reverse()
+        # ---- DRAW LOG CONTENT ----
+        y = top
+
+        for block in render_queue:
+            if block[0] == "line":
+                self._safeAddstr(y, 2, block[1], w)
+                y += 1
+
+            elif block[0] == "panel":
+                _, title, lines = block
+                y = drawBorderedBox(stdscr, y, 2, lines, title=title, attr=0)
+
+
         inputLine = f"{prompt}{input_text}"
         self._safeAddstr(bottomInputY, 2, inputLine, w)
         if cursor_pos is not None:

@@ -14,8 +14,9 @@ def inventory(self):
     lines = []
     # equipped weapons
     if self.player.weapon:
+        lines.append("---")
         lines.append(f"Equipped Weapon: {self.player.weapon.name}")
-        lines.append("")
+       
     # no items 
     if not self.player.inventory:
         lines.append("You do not currently have anything in your inventory")
@@ -31,8 +32,8 @@ def inventory(self):
         lines.append("You do not currently have anything in your inventory")
         panel("Inventory:", lines)
         return
+    lines.append("---")
     lines.append("Items:")
-    lines.append("")
     for itemName, count in itemCounts.items():
         if count > 1:
             lines.append(f"- {itemName} (x{count})")
