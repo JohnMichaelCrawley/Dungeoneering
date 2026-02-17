@@ -11,8 +11,9 @@ from Engine.ui import panel
 # See player stats  
 def stats(self):
     lines = [
-        f"{self.player.name} the {self.player.playerClass}",
-        "----",
+        "---",
+        f"Name: {self.player.name} the {self.player.playerClass}",
+        "---",
         f"Level: {self.player.level}",
         f"XP: {self.player.xp}",
         f"HP: {self.player.hp}/{self.player.maxHP}"

@@ -7,21 +7,40 @@ This file handles the commmand actions the player
 uses throughout the game like look in the current room,
 eating food or driking potions
 """
+
+
+"""
+    lines = [
+        "---",
+        "[1] - Continue",
+        "[2] - New Game",
+        "[3] - Delete save file"
+    ]
+    panel("Save File Found:", lines)
+"""
+from Engine.ui import panel
 # function look 
 def look(self):
+    lines = []
     room = self.dungeon[self.player.pos]
-    print(f"\n Room {self.player.pos}")  
+    lines.append("---")
     if room.enemies:
-        print("Enemies in the room:")
+        lines.append("Enemies in this room:")
         for i, enemy in enumerate(room.enemies, 1):
             status = f"{enemy.hp}/{enemy.maxHP}"
-            print(f" [{i}] {enemy.name} (Level {enemy.level}) HP: {status}")
+            lines.append(f"[{i}] {enemy.name} (Level {enemy.level}) HP: {status}")
+            lines.append("---") 
     else:
-        print("No enemies in the room")  
+        lines.append("No enemies in the room") 
+        lines.append("---") 
     if room.items:
-        print("Items:", ", ".join(item.name for item in room.items))
+        lines.append("Items:")
+        for item in room.items:
+            lines.append(f"- {item.name}")
     if room.boss:  
-        print("You feel a powerful energy")        
+        lines.append("You feel a powerful energy")  
+        lines.append("---")   
+    panel(f"Current Room: Room: {self.player.pos}", lines)    
 # function take <item> 
 def take(self, itemName):
     room = self.dungeon[self.player.pos]

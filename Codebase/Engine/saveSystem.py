@@ -14,6 +14,7 @@ import os
 from Room.Room import Room
 from Item.Item import Item
 from Enemy.Enemy import Enemy
+from Engine.ui import panel
 SAVEFILE = "savefile.json"
 # function Load Items
 def loadItems(name, itemType):
@@ -129,10 +130,13 @@ def checkForSaveFile(self):
     if not os.path.exists(SAVEFILE):
         self.setupNewGame()
         return False
-    print("Save file found!")
-    print("[1] Continue")
-    print("[2] New Game") 
-    print("[3] Delete save file")
+    lines = [
+        "---",
+        "[1] - Continue",
+        "[2] - New Game",
+        "[3] - Delete save file"
+    ]
+    panel("Save File Found:", lines)
     while True:
         choice = input("> ").strip()   
         if choice in ("q", "quit", "exit"):

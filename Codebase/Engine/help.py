@@ -37,9 +37,8 @@ def help(self):
         line = f"{command.ljust(COMMANDCOLWIDTH)} - {description}"
         lines.append(line)
     # spacing
-    lines.append("")
+    lines.append("---")
     lines.append("Examples:")
-    lines.append("")
     for example in examples:
         lines.append(f"- {example}")
     panel("Help - Command List:", lines)
